@@ -1,0 +1,63 @@
+#!/bin/bash
+
+#########################################################################################
+## This file sets the different parameters of the port to be used, ssl connection to be made,
+## hostname to be used and the NEU ID for which the secret flag needs to be generated.
+## These parameteres are then provided to the main program client.py and the 
+## necessary connections are made and the program is executed
+#########################################################################################
+
+## ./client <-p port> <-s> [hostname] [NEU ID]
+## The [hostname] and the [NEU ID] are two compulsory fields that need to be provided
+## <-p port> and <-s> are the three optional parameters
+if [ $# -lt 2 -o $# -gt 5 ] 
+then
+	echo "Not enough parameters.\nPlease enter in the following format ./client <-p port> <-s> [hostname] [NEU ID]\n"
+	exit 0
+fi
+
+## Checks if the first parameter specifies a port
+if [ "$1" == "-p" ] 
+then
+	port=$2
+## checks if the first parameter is the ssl flag
+elif [ "$1" == "-s" ] 
+then
+	port=27994
+else
+	port=27993
+fi
+
+## sets the ssl_flag to true if it is specified in the parameters
+if [ "$1" == "-s" -o "$3" == "-s" ] 
+then
+	ssl_flag=true
+else
+	ssl_flag=false
+fi
+
+## Sets the hostname and the NEU ID based on the number of parameters specified
+if [ $# == 2 ] 
+then
+	hostname=$1
+	NEU_ID=$2
+elif [ $# == 3 ] 
+then
+	hostname=$2
+	NEU_ID=$3
+elif [ $# == 4 ]
+then
+	hostname=$3
+	NEU_ID=$4
+elif [ $# == 5 ] 
+then
+	hostname=$4
+	NEU_ID=$5
+else
+	exit 0
+fi
+
+## Runs the main program
+python client.py $port $ssl_flag $hostname $NEU_ID
+
+exit 0

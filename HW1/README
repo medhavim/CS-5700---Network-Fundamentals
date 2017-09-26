@@ -1,0 +1,27 @@
+High-Level Approach : 
+
+We understood that we had to create a TCP socket to communicate with the server. We went through python documentation 
+on socket programming and understood how connections to the server can be made. 
+
+We started out by creating a socket and tried to connect to the server at the given address and port. 
+We followed the instructions given in the problem and sent a message to the server with the format given. 
+Once the server sent back the reply, we understood that we had to evaluate the reply containing expressions 
+and send it back it to the server. Eventually we were able to solve all expressions and obtain the secret flag. 
+
+Problems faced : 
+
+We tried to connect to the server from our home network. We couldn't establish a connection for about two days. 
+We realized from piazza that we had to login to ccs servers or get into Northeastern Network to connect to the server. 
+
+With SSL, we were not able to establish handshake with the recommended python class ssl.create_default_context. 
+When we traced our program, we figured out that the class was not using the right settings to create an SSL connection. 
+We used another class ssl.wrap_socket directly to avoid this issue. 
+
+Testing : 
+
+1) We tested our code by sending wrong results to the server to see if it failed.
+2) We sent result in an incorrect format to see if the server threw an exception.
+3) We tested our program with different port numbers as input.
+4) We tested with out of range port numbers. 
+5) We ran our application with and without ssl parameter supplied to the program.
+6) We have implementing error handling in code to gracefully exit the program in case an unexpected error shows up. 

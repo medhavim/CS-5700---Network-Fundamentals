@@ -1,0 +1,27 @@
+Project 5: Roll Your Own CDN
+#################################
+Team Members: Medhavi Mahansaria, Aswin Gopalam (Team-AM)
+
+1) Implementing DNS
+   DNS record from dig query is captured by the program which keeps listening to incoming packets at a specified address (Ip, port). The record is parsed, parsing through the headers section,                                                 exploring the query_section, extracting the question , class and type. A response answer is constructed based on the query with the information of the best ip / CDN server to be served for 
+   the request. The entire response with the headers, question and answer section are sent back to the client. GeoIP database is used to find the best server based on the distance between the 
+   client and the CDN servers. The server that is least far from the client is chosen as the best server. To improve the performance, we have implemented multithreading in the program to handle each request 
+   separately.If a best server is identified for an IP, it is stored in memory for future lookups as long as the program runs. 
+
+2) Implementing HTTP Server
+In the submitted program we take the port number and the Origin server as the input from the user and the create a GET request HTTP packet to get the data requested by the client. We have used a HTTPServer to bind the port number recieved. Once a request is recieved the do_GET method of the HTTPHandler will be called.  We have implemented the LRU mechanism to store the files on Disk and Memory. once a request is made, it first checks if the file is already present in the memory cache, if not then it checks if it is present in the Disk Cache. If the file requested for is not present in either of the Caches, a request to the origin is made. Once we get a new file, we remove the least recently used file from the dictionary / disk and replace it with the new file that was requested by the client from the origin. If the space for the evicted file is less than the new file another file is deleted and so on, till we have enough space to accomodate the recent file. Also, once a file is downloaded, in lieu of the constraint in space, we are compressing the files using the zlib library and saving it. We have also implemented multi-threading so take care of parallel requests for files.
+
+Challenges faced:
+1) The program is really huge and complex. Understanding the various requirements and the means to do that was very challenging.
+2) The setting up of the EC2 hosts to login without password took longer than expected.
+3) Understanding Zipf's Law for implementing the caching mechanism.
+4) Understanding and implementingthe DNS server creation.
+5) The implementation of runCDN and stopCDN script took way longer than expected.
+6) Testing!!!! Specially testing multiple threads!
+
+With Enough Time : 
+
+1) We would have implemented active measurements to identify the best server. 
+2) GeoIP would have been a backup implementation.
+3) Extensively tested the application to see if there is a scope for performance improvement. 
+

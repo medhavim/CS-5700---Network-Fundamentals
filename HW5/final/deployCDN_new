@@ -1,0 +1,63 @@
+#!/bin/bash
+
+echosts="ec2-54-210-1-206.compute-1.amazonaws.com
+ec2-54-67-25-76.us-west-1.compute.amazonaws.com
+ec2-35-161-203-105.us-west-2.compute.amazonaws.com
+ec2-52-213-13-179.eu-west-1.compute.amazonaws.com
+ec2-52-196-161-198.ap-northeast-1.compute.amazonaws.com
+ec2-54-255-148-115.ap-southeast-1.compute.amazonaws.com
+ec2-13-54-30-86.ap-southeast-2.compute.amazonaws.com
+ec2-52-67-177-90.sa-east-1.compute.amazonaws.com
+ec2-35-156-54-135.eu-central-1.compute.amazonaws.com"
+
+
+if [ $# -lt 10 -o $# -gt 10 ]
+then
+    echo "\nUSAGE: ./deployCDN -p <port> -o <origin> -n <name> -u <username> -i <keyfile>\n"
+    exit 0
+fi
+
+while getopts "p:o:u:n:i:" argv
+do
+    case $argv in
+
+        p)
+            port=$OPTARG
+            ;;
+        o)
+            origin=$OPTARG
+            ;;
+        u)
+            username=$OPTARG
+            ;;
+        n)
+            name=$OPTARG
+            ;;
+        i)
+            keyfile=$OPTARG
+            ;;
+        esac
+done
+
+#port=$2
+#origin=$4
+#name=$6
+#username=$8
+#keyfile=${10}
+dns_server="cs5700cdnproject.ccs.neu.edu"
+
+for host in $echosts 
+do
+   scp -i $keyfile httpserver $username@$host:~
+   scp -i $keyfile httpserver.py $username@$host:~ 
+   ssh -i $keyfile $username@$host "chmod 755 ~/httpserver.py; chmod 755 ~/httpserver"
+   echo "HTTP server script to $host deployed." 
+
+done
+
+
+scp -i $keyfile dnsserver.py $username@$dns_server:~
+scp -i $keyfile dnsserver $username@$dns_server:~
+ssh -i $keyfile $username@$dns_server "chmod 755 ~/dnsserver.py; chmod 755 ~/dnsserver"
+echo "DNS server script to $dns_server deployedi."
+

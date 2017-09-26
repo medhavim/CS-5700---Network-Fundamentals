@@ -1,0 +1,20 @@
+Project 5: Roll Your Own CDN
+#################################
+Team Members: Medhavi Mahansaria, Aswin Gopalam (Team-AM)
+
+----------
+Milestone:
+----------
+
+1) Implementing DNS
+We extract the DNS packet and parse the question section in the packet to get the domain name. We are presently retruning a default replica server for all queries. In the future, active measurements will be used to obtain the best replica server and a response will be constructed with the best replica server.
+
+2) Implementing HTTP Server
+In the submitted program we take the port number and the Origin server as the input from the user and the create a GET request HTTP packet to get the data requested by the client. We have used a HTTPServer to bind the port number recieved. Once a request is recieved the do_GET method of the HTTPHandler will be called. Based on a future caching mechanism, the file will be recieved either by the origin or the existing cache to GET the contents of the requested page. 
+
+Challenges faced:
+1) The program is really huge and complex. Understanding the various requirements and the means to do that was very challenging.
+2) The setting up pf the EC2 hosts to login without password took longer than expected.
+3) Understanding Zipf's Law for implementing the caching mechanism.
+4) Understanding and implementingthe DNS server creation
+5) Testing

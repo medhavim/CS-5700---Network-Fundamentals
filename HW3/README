@@ -1,0 +1,42 @@
+The main objective of this assignment is to analyze the performance of different TCP variants under different network conditions and its mechanisms to deal with congestion under the said conditions. The different TCP variants to be considered are Tahoe, Reno, NewReno and Vegas. 
+ 
+We will use NS-2 network simulator to perform these experiments by setting up different load conditions and queuing algorithms which have been explained in detail below. The scripts to setup network environment is going to be written in a scripting language, TCL. The trace of the results will be gathered using python scripts. 
+
+The data collected from these experiments will be used for analysis and will be plotted using Gnuplot. Gnuplot gives us tools to find the mean and standard deviation of various performance attributes used in our experiments.
+
+Experiment 1: TCP Performance Under Congestion 
+
+This experiment will analyze the throughput, latency and packet drops of different TCP variants (Tahoe, Reno, NewReno, and Vegas) in the presence of a Constant Bit Rate (CBR) flow. Since NS-2 forces us to use a queuing algorithm, we will use DropTail for all the results with respect to this experiment.
+
+We aim to generalize TCP behavior outside of the simulated environment by:
+-	Decreasing the CBR gradually from 10Mbps to 1 Mbps
+-	Increasing the CBR gradually from 1 Mbps to 10Mbps
+-	Introducing CBR flow after TCP stabilizes
+-	Increasing the packet size
+-	Making the packet size extremely small 
+
+The different performance attributes (throughput, latency and packet drop rate) will be mapped against the CBR flow (bandwidth) on the network and an overall “best” TCP variant will be found.
+
+Experiment 2: Fairness Between TCP Variants
+
+This experiment will analyze fairness of different sets of TCP variants in the presence of a CBR flow. Since NS-2 forces us to use a queuing algorithm, we will use DropTail for all the results with respect to this experiment. The way we will achieve this is by sending two TCP flows and one CBR flow to the network. We will observe the behavior of the flows and identify if the TCP flows are fair to each other and to which degree. The different combinations of TCP variants that we expect to cover for this experiment to look for fairness is as follows:
+-	Reno/Reno
+-	NewReno/Reno
+-	Vegas/Vegas
+-	NewReno/Vegas
+
+We aim to generalize TCP behavior outside of the simulated environment by:
+-	Decreasing the CBR gradually from 10Mbps to 1 Mbps
+-	Increasing the CBR gradually from 1 Mbps to 10Mbps
+-	Introducing CBR flow after TCP stabilizes
+-	Increasing the packet size
+-	Making the packet size extremely small 
+
+Like in Experiment 1, the different performance attributes (average throughput, latency and packet loss rate) of each TCP variant will be mapped against the CBR flow (bandwidth) on the network. The results of this experiment will help us in analyzing which pair of the variants are fair and which are not and why.
+
+Experiment 3: Influence of Queuing
+This experiment analyzes the effect of different queuing disciplines (DropTail and Random Early Drop (RED)). We will not be varying the CBR rates for this experiment, instead we will first start the TCP flow. The TCP variants that will be considered for this experiment will be TCP Reno and SACK. Once the TCP flow is stable, we will introduce the CBR flow and analyze the changes under the different queuing algorithm over a certain amount of time till we see significant changes.
+
+We will plot the different performance attributes (end-to-end latency, throughput, packet loss) against time for both the queuing algorithms to analyze which algorithm gives fair bandwidth to each flow and how does a particular TCP flow react to the introduction of a CBR flow. 
+
+

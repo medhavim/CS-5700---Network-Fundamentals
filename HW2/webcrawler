@@ -1,0 +1,25 @@
+#!/bin/bash
+
+#########################################################################################
+## This file sets the different parameters of the username and password to be used, 
+## to login into Fakebook and also for which the 5 secret flag needs to be generated.
+## These parameteres are then provided to the main program crawler.py and the 
+## necessary connections are made and the program is executed
+#########################################################################################
+
+## ./webcrawler [username] [password] 
+## The [username] and [password ID] are two compulsory fields that need to be provided
+## And are used by your crawler to log-in to Fakebook. 
+if [ $# -lt 2 -o $# -gt 2 ] 
+then
+	echo "\nPlease enter in the following format ./webcrawler [username] [password]\n"
+	exit 0
+fi
+
+username=$1
+password=$2
+
+## Runs the main program
+python3 crawler.py $username $password 
+
+exit 0

@@ -1,0 +1,67 @@
+Project 4 - RAW Sockets
+==========================
+
+TEAM-AM
+---------
+Medhavi Mahansaria, Aswin Gopalan 
+
+The Project was implemented using Python programming language
+
+OBJECTIVE
+------------
+- The goal of this assignment is to implement the low-level operations of the Internet protocol stack. 
+- The rawhttpget program takes a URL on the command line, downloads the associated web page or file, and saves it to the current directory.  
+- The program is responsible for building the IP and TCP headers in each packet. 
+
+PREREQUISITE
+--------------- 
+The program should be executed as a root user otherwise socket will not be created.
+
+APPROACH
+------------
+- The program runs by obtaining the URL argument from the command line.
+- The URL provided is then parsed to obtain the path and destination filename.
+- We extract the source IPaddress of client and destination IPaddress of server using the gethostname() function.
+- Then we create the raw sending and recieving sockets.
+- Since we are using Raw Packets, we use SOCK_RAW/IPPROTO_RAW to send the pakcets, and SOCK_RAW/IPPROTO_TCP to recieve the packets.
+- After the sockets are created the TCP and IP headers are built.
+- We create a tcp header and ip header with SYN flag in tcp header set to 1.
+- The server receives the packet it responds with a SYN/ACK.
+- The client the responds with an acknowledgement(ACK).
+- The Three way handshake is complete and the connection between the client and the server is established.
+- After establishing the connection we make a HTTP GET request for the URL that was provided in the command line arguement.
+- The server then acknowledges(ACK) the HTTP GET request and then sends a reply as data in the next packets.
+- The response is stored in a dictionary.
+- The client then adds the number of bytes it previously sent to its previous sequence number and acknowledges the data sent by the server.
+- sendto() and recvfrom() functions are used to send and receive packets from the server.
+- The data is accepted from the server and acknowledged until the server sends a FIN,ACK.
+- On receiving a FIN,ACK from the server the client then sends another FIN,ACK to the server and sets the FIN flag as 1.
+- The server then sends an acknowledgement thereby completing the connection termination procedure.
+- After all the data is recieved and the connection terminations procedure is complete, the data sent by the server is written to a file having the same name as the path. If the URL ends with a '/' or there is no path name then the packets are written to index.html.
+- If a message other than "200 OK" is returned by the server, the program prints an error message and exits. 
+
+CHALLENGES
+-------------
+- Creating the TCP and IP header.
+- Had difficulty in implementing the Three way handshake. 
+- Had a problem in FIN, ACK implementation as well. 
+- Recieving all the data.
+- Writing the data of the recieved packet in a sorted order.
+- Junk data in the file that being written
+
+TESTING
+----------
+- We tested the program using several different URLs
+	./rawhttpget [URL]
+- We tested the program to create the filename which is as in the given URL
+	./rawhttpget http://david.choffnes.com/classes/cs4700fa16/project4.php
+- We tested if no filename was given, program should create index.html
+	./rawhttpget http://david.choffness.com
+- We tested the program with a URL that does not return "200 OK"
+	./rawhttpget http://www.ccs.neu.edu
+- We stress tested our program with 2MB, 10MB and 50MB log files provided.
+	./rawhttpget http://david.choffnes.com/classes/cs4700fa16/2MB.log
+	./rawhttpget http://david.choffnes.com/classes/cs4700fa16/10MB.log
+	./rawhttpget http://david.choffnes.com/classes/cs4700fa16/50MB.log
+- We compared all the files that got generated using wget and diff commands.
+

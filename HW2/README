@@ -1,0 +1,46 @@
+High-Level Approach : 
+
+We first went through HTTP Made Really Easy Link from the assignment page and understood 
+that we had to construct appropriate HTTP Messages to communicate with the server. we also 
+realized that this had to happen through sockets. So, we used our experience from the previous 
+assignment to connect to the server with sockets. 
+
+We logged in to the fakebook website with the credentials given to us and inspected 
+the request and response headers, during the process. We realized that we had to reconstruct 
+the same parameters into our request to be able to login to the website from the program. 
+ 
+Once logged in, we realized that we had to capture session information and pass it on to 
+every subsequent request, to keep the program running without losing its state. After login,
+we started parsing all links in the homepage, stored them in a stack and made the program 
+parse more links from the stack. While doing this, we made sure that we kept track of all links 
+that were visited. A new link gets added to the stack, if the link has not been visited 
+already and the link is not already present in the stack. The process went on, till the 
+program crawled enough pages to get all the secret flags.
+
+Problems faced : 
+
+Figuring out all the right headers for the login page was a bit difficult. Once we figured
+out login, we were getting empty responses on our get messages. This was due to using a single
+socket for all request-response communiction. We then created a new socket for every request-response
+cycle and close the sockets appropriately. 
+
+Maintaining session also seemed a bit problematic. It took some time to realize that we had to extract 
+the sessionId after login and pass it on to subsequent get requests. 
+
+Once we figured these stuff, we were able to move ahead without much trouble. 
+
+Testing:
+
+1) We wanted to test all HTTP status codes from the server response, so we added extra code temporarily 
+   to test them. (e.g. we asked the crawler to parse a wrong URL : /fakebook/abc, when a variable count was equal to 10 )
+
+2) To test for 404 / 403 -> We randomly introduced an URL to crawl that was invalid like (/fakebook/abc) to see if 
+   the server sent a 404. We then made sure that the URL was dropped after recieving the 404 reponse ,got removed 
+   from the stack and moved on to the next url for crawling. 
+
+3) To test for 500 -> We constructed our HTTP request with wrong parameters, so that the server could return 500 error. 
+   e.g, we were sending "usrname" in request body instead of "username", so that the server returned a 500 error. 
+   We also printed a statement to see if our code was retrying the same request. 
+
+4) We printed statements periodically to see if the program was actually following the flow of execution that was intended. 
+

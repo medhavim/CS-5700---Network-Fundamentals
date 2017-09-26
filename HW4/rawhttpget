@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#########################################################################################
+## This file uses the URL provided to download the related data using raw sockets 
+#########################################################################################
+## NOTE: Needs to be run by root user or using 'sudo'
+## ./rawhttpget [url] 
+## The [url] is a compulsory fields that need to be provided
+## the data related to the URL is downloaded in the same directory where the program is run
+if [ $# -lt 1 -o $# -gt 1 ]
+then
+    echo "\nPlease enter in the following format ./rawhttpget [url] \n"
+    exit 0
+fi
+
+url=$1
+
+## Runs the main program
+python rawhttpget.py $url
